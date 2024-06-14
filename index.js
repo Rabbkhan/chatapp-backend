@@ -4,6 +4,7 @@ const connectDB = require('./config/connectDB')
 const router = require('./routes')
 const cookiesParser = require('cookie-parser')
 require('dotenv').config();
+
 const {app, server} = require('./socket/index')
 // const app = express();
 app.use(express.json());
@@ -13,6 +14,9 @@ app.use(cors({
     credentials:true
 }))
 
+app.use('/',(req,res)=>{
+    res.send('server is working')
+})
 
 // api end points 
 app.use('/api',router)
@@ -24,6 +28,7 @@ connectDB().then(()=>{
         console.log(`server running at ${PORT}`)
     })
 })
+
 
 
 

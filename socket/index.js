@@ -199,6 +199,8 @@ io.to(msgByUserId).emit(
 })
 
 
+
+
     // Disconnect
     socket.on("disconnect", () => {
       onlineUser.delete(user._id.toString());
@@ -206,6 +208,7 @@ io.to(msgByUserId).emit(
       io.emit("onlineUser", Array.from(onlineUser));
       console.log("disconnect user", socket.id);
     });
+
   } catch (err) {
     console.error("Error in connection event", err);
     socket.emit("error", "Connection error");
