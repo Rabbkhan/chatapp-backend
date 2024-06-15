@@ -18,6 +18,7 @@ app.use('/',(req,res)=>{
     res.send('server is working')
 })
 
+
 // api end points 
 app.use('/api',router)
 
