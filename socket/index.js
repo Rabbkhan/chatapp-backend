@@ -198,10 +198,7 @@ io.to(msgByUserId).emit(
 
 })
 
-
-
-
-    // Disconnect
+    // Disconnects
     socket.on("disconnect", () => {
       onlineUser.delete(user._id.toString());
       socket.leave(user._id.toString());
