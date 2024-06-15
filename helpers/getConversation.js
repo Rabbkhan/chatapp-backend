@@ -1,5 +1,5 @@
 const { Socket } = require("socket.io");
-const { ConversationModel } = require("../model/conversation.model");
+const { ConversationModel } = require("../model/ConversationModel");
 
 const getConversation = async (currentUserId) => {
   if (currentUserId) {

@@ -1,5 +1,5 @@
 const getUserDetailsFromToken = require("../helpers/getUserDetailsFromToken")
-const UserModel = require("../model/user.model")
+const UserModel = require("../model/UserModel")
 
 const updateUserDetails = async (req,res) =>{
 

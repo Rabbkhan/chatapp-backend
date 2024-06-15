@@ -1,4 +1,4 @@
-const UserModel = require('../model/user.model')
+const UserModel = require('../model/UserModel')
 
 const searchUser = async(request,response)=>{
     try {
