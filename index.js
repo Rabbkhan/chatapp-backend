@@ -8,7 +8,7 @@ require('dotenv').config();
 const { app, server } = require('./socket/index');
 
 // Log the frontend URL for debugging
-console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
+// console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
 
 app.use(express.json());
 app.use(cookiesParser());
@@ -20,9 +20,9 @@ app.use(cors({
 }));
 
 // Simple route for health check
-app.use('/', (req, res) => {
-    res.send('server is working');
-});
+// app.use('/', (req, res) => {
+//     res.send('server is working');
+// });
 
 // API routes
 app.use('/api', router);
