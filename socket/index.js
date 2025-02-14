@@ -134,7 +134,7 @@ io.on('connection',async(socket)=>{
                     { sender: user?._id, receiver: msgByUserId },
                     { sender: msgByUserId, receiver: user?._id }
                 ]
-            });
+            });updateConversation
     
             if (!conversation) {
                 console.error('Conversation not found');
@@ -153,15 +153,17 @@ io.on('connection',async(socket)=>{
             }
     
             // Update unseenMsg count
-            conversation.unseenMsg = 0;
-            await conversation.save();
+            // conversation.unseenMsg = 0;
+            // await conversation.save();
     
             // Send updated conversation
             const conversationSender = await getConversation(user?._id?.toString());
             const conversationReceiver = await getConversation(msgByUserId);
     
             io.to(user?._id?.toString()).emit('conversation', conversationSender);
+
             io.to(msgByUserId).emit('conversation', conversationReceiver);
+            
         } catch (error) {
             console.error('Error updating seen status:', error);
         }

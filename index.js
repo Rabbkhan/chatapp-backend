@@ -10,14 +10,15 @@ const { app, server } = require('./socket/index');
 // Log the frontend URL for debugging
 // console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
 
-app.use(express.json());
-app.use(cookiesParser());
-
 // CORS configuration
 app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials: true
 }));
+
+app.use(express.json());
+app.use(cookiesParser());
+
 
 // Simple route for health check
 // app.use('/', (req, res) => {
@@ -25,9 +26,16 @@ app.use(cors({
 // });
 
 // API routes
+const PORT = process.env.PORT || 8080;
+
+app.get('/',(request,response)=>{
+    response.json({
+        message : "Server running at " + PORT
+    })
+})
+
 app.use('/api', router);
 
-const PORT = process.env.PORT || 8080;
 
 connectDB().then(() => {
     server.listen(PORT, () => {
