@@ -127,29 +127,45 @@ io.on('connection',async(socket)=>{
         
     })
 
-    socket.on('seen',async(msgByUserId)=>{
-        
-        let conversation = await ConversationModel.findOne({
-            "$or" : [
-                { sender : user?._id, receiver : msgByUserId },
-                { sender : msgByUserId, receiver :  user?._id}
-            ]
-        })
-
-        const conversationMessageId = conversation?.messages || []
-
-        const updateMessages  = await MessageModel.updateMany(
-            { _id : { "$in" : conversationMessageId }, msgByUserId : msgByUserId },
-            { "$set" : { seen : true }}
-        )
-
-        //send conversation
-        const conversationSender = await getConversation(user?._id?.toString())
-        const conversationReceiver = await getConversation(msgByUserId)
-
-        io.to(user?._id?.toString()).emit('conversation',conversationSender)
-        io.to(msgByUserId).emit('conversation',conversationReceiver)
-    })
+    socket.on('seen', async (msgByUserId) => {
+        try {
+            let conversation = await ConversationModel.findOne({
+                "$or": [
+                    { sender: user?._id, receiver: msgByUserId },
+                    { sender: msgByUserId, receiver: user?._id }
+                ]
+            });
+    
+            if (!conversation) {
+                console.error('Conversation not found');
+                return;
+            }
+    
+            const conversationMessageId = conversation?.messages || [];
+    
+            const updateMessages = await MessageModel.updateMany(
+                { _id: { "$in": conversationMessageId }, msgByUserId: msgByUserId },
+                { "$set": { seen: true } }
+            );
+    
+            if (updateMessages.nModified === 0) {
+                console.error('No messages updated');
+            }
+    
+            // Update unseenMsg count
+            conversation.unseenMsg = 0;
+            await conversation.save();
+    
+            // Send updated conversation
+            const conversationSender = await getConversation(user?._id?.toString());
+            const conversationReceiver = await getConversation(msgByUserId);
+    
+            io.to(user?._id?.toString()).emit('conversation', conversationSender);
+            io.to(msgByUserId).emit('conversation', conversationReceiver);
+        } catch (error) {
+            console.error('Error updating seen status:', error);
+        }
+    });
 
     //disconnect
     socket.on('disconnect',()=>{
